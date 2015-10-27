@@ -2,6 +2,9 @@
 
 namespace Fatty.Brain
 {
+    /// <summary>
+    /// Adapted from this <a href="http://www.c-sharpcorner.com/UploadFile/rmcochran/AI_OOP_NeuralNet06192006090112AM/AI_OOP_NeuralNet.aspx">sample code</a>
+    /// </summary>
     public sealed class NeuralNet : INeuralNet
     {
         private NeuralLayer hiddenLayer;
