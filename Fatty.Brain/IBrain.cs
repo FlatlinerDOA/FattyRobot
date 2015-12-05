@@ -1,17 +1,11 @@
 ﻿namespace Fatty.Brain
 {
     using System;
+    using System.Collections.Generic;
+    using System.Reactive.Subjects;
 
     interface IBrain
     {
-        IObserver<Intent> Inputs
-        {
-            get;
-        }
-
-        IObservable<object> Actions
-        {
-            get;
-        }
+        IDisposable Start(IEnumerable<IObservable<Intent>> inputs, IEnumerable<IObserver<Intent>> outputs);
     }
 }

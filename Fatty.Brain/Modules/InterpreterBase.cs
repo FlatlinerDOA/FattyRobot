@@ -1,17 +1,22 @@
-﻿namespace Fatty.Brain.Inputs
+﻿namespace Fatty.Brain.Modules
 {
     using System;
     using System.Collections.Generic;
+    using System.Reactive;
+    using System.Reactive.Linq;
     using System.Reactive.Subjects;
-
-    public sealed class FacialRecognition : IObserver<Intent>, IObservable<Intent>
+    public abstract class InterpreterBase : IObserver<Intent>, IObservable<Intent>
     {
         private readonly Dictionary<string, Func<Intent, IObservable<Intent>>> interpretations = new Dictionary<string, Func<Intent, IObservable<Intent>>>();
+
         private readonly Subject<Intent> outputs = new Subject<Intent>();
 
-        public FacialRecognition()
+        public Dictionary<string, Func<Intent, IObservable<Intent>>> Interpretations
         {
-            this.interpretations.Add("InterpretPhoto", this.InterpretPhoto);
+            get
+            {
+                return this.interpretations;
+            }
         }
 
         public void OnCompleted()
@@ -32,12 +37,12 @@
 
         public IDisposable Subscribe(IObserver<Intent> observer)
         {
-            return this.outputs.Subscribe(observer);
+            return this.InitializeAsync().SelectMany(this.outputs).Subscribe(observer);
         }
 
-        private IObservable<Intent> InterpretPhoto(Intent intent)
+        protected virtual IObservable<Unit> InitializeAsync()
         {
-            throw new NotImplementedException();
+            return Observable.Return(new Unit());
         }
     }
 }

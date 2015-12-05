@@ -6,15 +6,13 @@
     using System.Reactive;
     using System.Reactive.Concurrency;
     using System.Reactive.Linq;
-
-    public sealed class ImperativeBrain
+    using System.Reactive.Subjects;
+    public sealed class ImperativeBrain : IBrain
     {
         public ImperativeBrain()
         {
             this.Background = TaskPoolScheduler.Default;
             this.HumanInterface = CurrentThreadScheduler.Instance;
-            this.InputModules = new List<IObservable<Intent>>();
-            this.OutputModules = new List<IObserver<Intent>>();
         }
 
         public IScheduler Background
@@ -27,22 +25,10 @@
             get; set;
         }
 
-        public List<IObservable<Intent>> InputModules
+        public IDisposable Start(IEnumerable<IObservable<Intent>> inputModules, IEnumerable<IObserver<Intent>> outputModules)
         {
-            get;
-            private set;
-        }
-
-        public List<IObserver<Intent>> OutputModules
-        {
-            get;
-            private set;
-        }
-
-        public IDisposable Start()
-        {
-            var t = from setOfIntents in Observable.Merge(this.InputModules).Buffer(TimeSpan.FromMilliseconds(500))
-                    let bestIntent = setOfIntents.OrderByDescending(p => p.Probability).FirstOrDefault()
+            var t = from setOfIntents in Observable.Merge(inputModules).Buffer(TimeSpan.FromMilliseconds(500))
+                    let bestIntent = setOfIntents.OrderByDescending(p => p.Probability * p.Priority).FirstOrDefault()
                     where bestIntent != null
                     select bestIntent;
 
@@ -51,7 +37,7 @@
             // Priority 2  Probability 100%  1 * (1/2) = 0.5
             // Prioirty 3  Probability 100%  1 * (1/3) = 0.25
             var sharedSubscription = t.Publish();
-            foreach (var observer in this.OutputModules)
+            foreach (var observer in outputModules)
             {
                 sharedSubscription.Subscribe(observer);
             }
