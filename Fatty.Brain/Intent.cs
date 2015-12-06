@@ -11,7 +11,7 @@
         public Intent(string name)
         {
             this.Name = name;
-            this.args = new Dictionary<string, string>();
+            this.args = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             this.Priority = 2;
             this.Probability = 1d;
             this.Weight = 0.5d;
@@ -20,7 +20,7 @@
         public Intent(string name, double probability, int priority)
         {
             this.Name = name;
-            this.args = new Dictionary<string, string>();
+            this.args = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             this.Priority = priority;
             this.Probability = probability;
             this.Weight = this.Probability * (1d / this.Priority);

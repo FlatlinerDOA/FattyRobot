@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="20">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="200"/>
@@ -16,7 +16,7 @@
             <RowDefinition Height="200"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBox x:Name="control" Text=""></TextBox>
+        <TextBox x:Name="control" Text="" AcceptsReturn="True"></TextBox>
         <ItemsControl ItemsSource="{Binding Logs}" Grid.Row="1" Grid.Column="0">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
@@ -25,5 +25,6 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
         <CaptureElement x:Name="capturePreview" Grid.Column="1" Grid.Row="0"></CaptureElement>
+        <MediaElement x:Name="media" PlaybackRate="1.2" />
     </Grid>
 </Page>

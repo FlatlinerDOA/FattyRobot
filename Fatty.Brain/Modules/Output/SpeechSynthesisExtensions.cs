@@ -9,9 +9,10 @@ namespace Fatty.Brain.Modules.Output
 {
     public static class SpeechSynthesisExtensions
     {
-        public static IObservable<Intent> Say(this IObservable<Intent> source, string text)
+        public static IObservable<Intent> Say(this InterpreterBase source, string text)
         {
-            return source.Select(_ => new Intent("TextToSpeech")
+            return Observable.Return(
+                new Intent("Say")
                 {
                     {
                         "Text", text

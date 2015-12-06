@@ -108,6 +108,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Input\WebCamera.cs" />
+    <Compile Include="Output\AudioCapturePermissions.cs" />
+    <Compile Include="Output\MediaExtensions.cs" />
+    <Compile Include="Output\SpeechSynthesis.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Fatty.UniversalFramework.rd.xml" />
   </ItemGroup>

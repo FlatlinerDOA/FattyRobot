@@ -7,9 +7,9 @@
 
     public static class SpeechRecognitionExtensions
     {
-        public static IObservable<Intent> WhenIHear(this IObservable<Intent> source, string text)
+        public static IObservable<Intent> WhenIHear(this InterpreterBase source, string text)
         {
-            return source.Where(i => i.Name == text);
+            return source.Where(i => string.Equals(i.Name, text, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

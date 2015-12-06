@@ -27,10 +27,12 @@
 
         public IDisposable Start(IEnumerable<IObservable<Intent>> inputModules, IEnumerable<IObserver<Intent>> outputModules)
         {
-            var t = from setOfIntents in Observable.Merge(inputModules).Buffer(TimeSpan.FromMilliseconds(500))
-                    let bestIntent = setOfIntents.OrderByDescending(p => p.Probability * p.Priority).FirstOrDefault()
-                    where bestIntent != null
-                    select bestIntent;
+            // .Buffer(TimeSpan.FromMilliseconds(500))
+                        ////.OrderBy(i => i.Weight)
+                        ////.LastOrDefault()
+            var t = from intent in Observable.Merge(inputModules)
+                    where intent != null
+                    select intent;
 
             // Priority 1  Probability 80% 1 * 0.8 = .8
             // Priority 1  Probability 50% 1 * 0.5 = 0.5

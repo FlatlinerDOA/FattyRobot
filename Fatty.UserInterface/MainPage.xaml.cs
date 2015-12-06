@@ -7,7 +7,9 @@ using System.Reactive.Concurrency;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Fatty.Brain;
 using Fatty.Brain.Imperative;
+using Fatty.Brain.Modules.Cognition;
 using Fatty.UniversalFramework.Input;
+using Fatty.UniversalFramework.Output;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -46,13 +48,15 @@ namespace Fatty.UserInterface
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-
+            this.DataContext = this;
             var normalScheduler = new CoreDispatcherScheduler(this.Dispatcher, Windows.UI.Core.CoreDispatcherPriority.Normal);
             var lowScheduler = new CoreDispatcherScheduler(this.Dispatcher, Windows.UI.Core.CoreDispatcherPriority.Low);
             var modules = new object[]
             {
                 new TextInput(this.control),
-                new UserInterfaceTelemetry(this.Logs),
+                new UserInterfaceTelemetry(this.Logs, lowScheduler),
+                new SpeechSynthesis(this.Dispatcher, this.media),
+                new Playful(),
                 new WebCamera(normalScheduler, this.capturePreview),
             };
 
