@@ -60,7 +60,7 @@ namespace Fatty.UserInterface
         {
             this.userInterface.Schedule(() =>
             {
-                this.logs.Add(value);
+                this.logs.Insert(0, value);
             });
 
             base.OnNext(value);

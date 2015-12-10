@@ -13,6 +13,13 @@ namespace Fatty.Brain.Cognition
 {
     public sealed class Manners : InterpreterBase
     {
+        private readonly RandomQueue<string> greetings = new RandomQueue<string>()
+        {
+            "What's up everybody? My name is Fatty",
+            "What's going on everyone? Fatty is my name",
+            "Hello! My name is Fatty, the Hamster Robot!",
+        };
+
         private readonly RandomQueue<string> apologies = new RandomQueue<string>()
         {
             "I'm very sorry, {0}",
@@ -41,13 +48,14 @@ namespace Fatty.Brain.Cognition
             this.Interpretations.Add("Thanks", _ => this.Say(this.thanks.Next()));
             this.Interpretations.Add("Error", error => Observable.Return(new Intent("ApologizeFor", error)));
             this.Interpretations.Add("ApologizeFor", _ => this.Say(this.apologies.Next(), _.Values.First()));
+            this.Interpretations.Add("Hello", _ => this.Say(this.greetings.Next()));
         }
 
         protected override IObservable<Intent> InitializeAsync()
         {
             return from allReady in this.Inputs.WhenReady(new Unit(), "SpeechSynthesis")
                    from delay in Observable.Timer(TimeSpan.FromSeconds(1))
-                   from intent in this.Say("Hello! My name is Fatty, the Hamster Robot!")
+                   from intent in this.Say(this.greetings.Next())
                    select intent;
         }
     }

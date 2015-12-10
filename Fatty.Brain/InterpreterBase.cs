@@ -36,6 +36,14 @@
             }
         }
 
+        public IScheduler ObserveOn
+        {
+            get
+            {
+                return this.observeOn;
+            }
+        }
+
         public IObservable<Intent> Inputs
         {
             get

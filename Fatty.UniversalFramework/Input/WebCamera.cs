@@ -99,7 +99,7 @@
 
         protected override IObservable<Intent> InitializeAsync()
         {
-            return Observable.FromAsync(this.InitializeVideoAsync);
+            return Observable.FromAsync(this.InitializeAudioOnlyAsync);
         }
 
         private int ConvertVideoRotationToMFRotation(VideoRotation rotation)
@@ -157,7 +157,10 @@
             bool permissionGained = await AudioCapturePermissions.RequestMicrophoneCapture();
             if (!permissionGained)
             {
-                return new Intent("Error") { { "Message", "I could not connect to the Microphone, can you make sure my Microphone is plugged in?" } };
+                return new Intent("Error")
+                {
+                    { "Message", "I could not connect to the Microphone, can you make sure my Microphone is plugged in?" }
+                };
             }
 
             var devices = await Windows.Devices.Enumeration.DeviceInformation.FindAllAsync(Windows.Devices.Enumeration.DeviceClass.VideoCapture);

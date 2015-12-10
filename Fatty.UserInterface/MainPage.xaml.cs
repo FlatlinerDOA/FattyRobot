@@ -9,6 +9,7 @@ using Fatty.Brain;
 using Fatty.Brain.Cognition;
 using Fatty.Brain.Imperative;
 using Fatty.Brain.Modules.Cognition;
+using Fatty.Brain.Modules.Input;
 using Fatty.UniversalFramework.Input;
 using Fatty.UniversalFramework.Output;
 using Windows.Foundation;
@@ -60,7 +61,8 @@ namespace Fatty.UserInterface
                 new Manners(),
                 new Educational(),
                 new Playful(),
-                new WebCamera(normalScheduler, this.capturePreview),
+                //   new WebCamera(normalScheduler, this.capturePreview),
+                new SpeechRecognition(normalScheduler)
             };
 
             this.subscription = this.brain.Start(

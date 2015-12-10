@@ -3,7 +3,7 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-
+    using System.Text;
     public sealed class Intent : IDictionary<string, string>
     {
         private readonly Dictionary<string, string> args;
@@ -174,6 +174,27 @@
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.args.GetEnumerator();
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            sb.Append(this.Name);
+
+            if (this.Count == 0)
+            {
+                return sb.ToString();
+            }
+
+            sb.AppendLine();
+
+            foreach (var kv in this)
+            {
+                sb.Append(" ").Append(kv.Key).Append("=").Append(kv.Value);
+                sb.AppendLine();
+            }
+
+            return sb.ToString();
         }
     }
 }

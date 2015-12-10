@@ -61,7 +61,6 @@
     <Compile Include="Output\MotorControl.cs" />
     <Compile Include="Output\RemoteTelemetry.cs" />
     <Compile Include="Output\SpeechSynthesisExtensions.cs" />
-    <Compile Include="Input\SpeechRecognition.cs" />
     <Compile Include="Intent.cs" />
     <Compile Include="NeuralFactor.cs" />
     <Compile Include="NeuralLayer.cs" />
