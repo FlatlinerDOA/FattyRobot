@@ -25,6 +25,7 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
         <CaptureElement x:Name="capturePreview" Grid.Column="1" Grid.Row="0"></CaptureElement>
+        <!--<Image x:Name="captureImage" Width="200" Height="200" Visibility="Visible"/>-->
         <MediaElement x:Name="media" PlaybackRate="1.2" />
     </Grid>
 </Page>

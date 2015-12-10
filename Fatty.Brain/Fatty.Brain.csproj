@@ -39,8 +39,11 @@
     <None Include="readme.md" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cognition\Educational.cs" />
+    <Compile Include="Cognition\Manners.cs" />
     <Compile Include="Extensions\RandomExtensions.cs" />
     <Compile Include="Extensions\RandomQueue.cs" />
+    <Compile Include="Extensions\RandomQueueEnumerator.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="IBrain.cs" />
     <Compile Include="Imperative\ImperativeBrain.cs" />
@@ -49,16 +52,16 @@
     <Compile Include="INeuron.cs" />
     <Compile Include="INeuronReceptor.cs" />
     <Compile Include="INeuronTransmitter.cs" />
-    <Compile Include="Modules\Input\RemoteControl.cs" />
-    <Compile Include="Modules\Input\SpeechRecognitionExtensions.cs" />
-    <Compile Include="Modules\InterpreterBase.cs" />
-    <Compile Include="Modules\Cognition\Playful.cs" />
-    <Compile Include="Modules\Input\FacialRecognition.cs" />
-    <Compile Include="Modules\Output\MotorControl.cs" />
-    <Compile Include="Modules\Output\RemoteTelemetry.cs" />
-    <Compile Include="Modules\Output\SpeechSynthesisExtensions.cs" />
-    <Compile Include="Modules\SpeechExtensions.cs" />
-    <Compile Include="Modules\Input\SpeechRecognition.cs" />
+    <Compile Include="Input\RemoteControl.cs" />
+    <Compile Include="Input\SpeechRecognitionExtensions.cs" />
+    <Compile Include="InterpreterBase.cs" />
+    <Compile Include="Cognition\Playful.cs" />
+    <Compile Include="Input\FacialRecognition.cs" />
+    <Compile Include="Extensions\ModuleExtensions.cs" />
+    <Compile Include="Output\MotorControl.cs" />
+    <Compile Include="Output\RemoteTelemetry.cs" />
+    <Compile Include="Output\SpeechSynthesisExtensions.cs" />
+    <Compile Include="Input\SpeechRecognition.cs" />
     <Compile Include="Intent.cs" />
     <Compile Include="NeuralFactor.cs" />
     <Compile Include="NeuralLayer.cs" />

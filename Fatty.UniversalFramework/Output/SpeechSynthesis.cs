@@ -20,19 +20,34 @@ namespace Fatty.UniversalFramework.Output
     {
         public const string Say = "Say";
 
+        public const string Stop = "Stop";
+
+        public const string Saying = "Saying";
+
         public const string DoneSaying = "DoneSaying";
 
         private SpeechSynthesizer synthesizer;
+
         private bool isListening;
+
         private string voiceMatchLanguageCode = "en";
+
         private CoreDispatcher dispatcher;
+
         private MediaElement media;
 
-        public SpeechSynthesis(CoreDispatcher dispatcher, MediaElement media) : base(Scheduler.Default)
+        public SpeechSynthesis(CoreDispatcher dispatcher, MediaElement media) : base(CoreDispatcherScheduler.Current)
         {
             this.media = media;
             this.dispatcher = dispatcher;
             this.Interpretations.Add(Say, this.SayAsync);
+            this.Interpretations.Add(Stop, this.StopAsync);
+        }
+
+        private IObservable<Intent> StopAsync(Intent arg)
+        {
+            this.media.Stop();
+            return Observable.Return<Intent>(new Intent("Interrupted"));
         }
 
         private IObservable<Intent> SayAsync(Intent arg)
@@ -46,20 +61,23 @@ namespace Fatty.UniversalFramework.Output
             await this.dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 media.SetSource(stream, stream.ContentType);
-                ////media.MediaEnds().Select(_ => done).ObserveOn(this.dispatcher).Subscribe(this.Send);
                 media.Play();
             });
 
-            var done = new Intent(DoneSaying) { { "Text", text } };
+            var done = new Intent(Saying) { { "Text", text } };
             return done;
         }
 
-        protected override IObservable<Unit> InitializeAsync()
+        protected override IObservable<Intent> InitializeAsync()
         {
-            return Observable.FromAsync(this.InitializeSynthesizer);
+            return Observable.Defer(() =>
+            {
+                this.InitializeSynthesizer();
+                return Observable.Return(this.Ready()).Concat(this.media.MediaEnds().SubscribeOn(this.dispatcher).ObserveOn(this.dispatcher).Select(_ => new Intent("DoneSaying")));
+            });
         }
 
-        public async Task InitializeSynthesizer()
+        public void InitializeSynthesizer()
         {
             if (synthesizer == null)
             {
@@ -75,7 +93,6 @@ namespace Fatty.UniversalFramework.Output
                     synthesizer.Voice = voice;
                 }
             }
-
         }
     }
 }

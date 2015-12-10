@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reactive.Concurrency;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Fatty.Brain;
+using Fatty.Brain.Cognition;
 using Fatty.Brain.Imperative;
 using Fatty.Brain.Modules.Cognition;
 using Fatty.UniversalFramework.Input;
@@ -56,6 +57,8 @@ namespace Fatty.UserInterface
                 new TextInput(this.control),
                 new UserInterfaceTelemetry(this.Logs, lowScheduler),
                 new SpeechSynthesis(this.Dispatcher, this.media),
+                new Manners(),
+                new Educational(),
                 new Playful(),
                 new WebCamera(normalScheduler, this.capturePreview),
             };

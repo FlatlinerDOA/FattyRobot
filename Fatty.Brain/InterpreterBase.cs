@@ -11,11 +11,20 @@
     public abstract class InterpreterBase : IObserver<Intent>, IObservable<Intent>
     {
         private readonly Dictionary<string, Func<Intent, IObservable<Intent>>> interpretations = new Dictionary<string, Func<Intent, IObservable<Intent>>>(StringComparer.OrdinalIgnoreCase);
+
         private IScheduler observeOn;
-        private readonly Subject<Intent> outputs = new Subject<Intent>();
+
+        private readonly ReplaySubject<Intent> inputs = new ReplaySubject<Intent>(3);
+
+        private readonly ReplaySubject<Intent> outputs = new ReplaySubject<Intent>(1);
+
+        public InterpreterBase() : this(Scheduler.Default)
+        {
+        }
 
         public InterpreterBase(IScheduler observeOn)
         {
+            this.Name = this.GetType().Name;
             this.observeOn = observeOn;
         }
 
@@ -25,6 +34,20 @@
             {
                 return this.interpretations;
             }
+        }
+
+        public IObservable<Intent> Inputs
+        {
+            get
+            {
+                return this.inputs;
+            }
+        }
+
+        public string Name
+        {
+            get;
+            private set;
         }
 
         public void OnCompleted()
@@ -37,7 +60,7 @@
             Debug.Assert(error == null, error.ToString());
         }
 
-        public void OnNext(Intent value)
+        public virtual void OnNext(Intent value)
         {
             if (this.interpretations.ContainsKey(value.Name))
             {
@@ -45,6 +68,10 @@
                 {
                     this.interpretations[value.Name](value).Subscribe(this.Send);
                 });
+            }
+            else
+            {
+                this.inputs.OnNext(value);
             }
         }
 
@@ -55,12 +82,19 @@
 
         public IDisposable Subscribe(IObserver<Intent> observer)
         {
-            return this.InitializeAsync().SelectMany(_ => this.outputs).Finally(() => Debug.WriteLine("Stopping listening to " + this.GetType().Name)).Subscribe(observer);
+            return this.InitializeAsync().Merge(this.outputs)
+                .Finally(() => Debug.WriteLine("Stopping listening to " + this.Name))
+                .Subscribe(observer);
         }
 
-        protected virtual IObservable<Unit> InitializeAsync()
+        protected Intent Ready()
         {
-            return Observable.Return(new Unit());
+            return new Intent(this.Name) { { "Status", "Ready" } };
+        }
+
+        protected virtual IObservable<Intent> InitializeAsync()
+        {
+            return Observable.Return(this.Ready());
         }
     }
 }

@@ -17,6 +17,15 @@
             this.Weight = 0.5d;
         }
 
+        public Intent(string name, IDictionary<string, string> keys)
+        {
+            this.Name = name;
+            this.args = new Dictionary<string, string>(keys, StringComparer.OrdinalIgnoreCase);
+            this.Priority = 2;
+            this.Probability = 1d;
+            this.Weight = 0.5d;
+        }
+
         public Intent(string name, double probability, int priority)
         {
             this.Name = name;
@@ -24,6 +33,11 @@
             this.Priority = priority;
             this.Probability = probability;
             this.Weight = this.Probability * (1d / this.Priority);
+        }
+
+        public bool IsNamed(string name)
+        {
+            return string.Equals(this.Name, name, StringComparison.OrdinalIgnoreCase);
         }
 
         public Intent(string name, double probability, int priority, Dictionary<string, string> args)
@@ -93,7 +107,12 @@
         {
             get
             {
-                return this.args[key];
+                if (this.args.ContainsKey(key))
+                {
+                    return this.args[key];
+                }
+
+                return null;
             }
 
             set

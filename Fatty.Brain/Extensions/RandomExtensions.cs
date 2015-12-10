@@ -15,9 +15,9 @@
             return items[random.Next(0, items.Count)];
         }
 
-        public static void Shuffle<T>(this Random random, T[] array)
+        public static void Shuffle<T>(this Random random, IList<T> array)
         {
-            for (int i = array.Length; i > 1; i--)
+            for (int i = array.Count; i > 1; i--)
             {
                 // Pick random element to swap.
                 int j = random.Next(i); // 0 <= j <= i-1

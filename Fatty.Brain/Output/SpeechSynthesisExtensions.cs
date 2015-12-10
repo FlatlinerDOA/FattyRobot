@@ -19,5 +19,16 @@ namespace Fatty.Brain.Modules.Output
                     }
                 });
         }
+
+        public static IObservable<Intent> Say(this InterpreterBase source, string text, params string[] args)
+        {
+            return Observable.Return(
+                new Intent("Say")
+                {
+                    {
+                        "Text", string.Format(text, args)
+                    }
+                });
+        }
     }
 }

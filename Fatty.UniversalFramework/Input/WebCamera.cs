@@ -14,6 +14,7 @@
     using Windows.Graphics.Display;
     using Windows.Media.Capture;
     using Windows.Media.MediaProperties;
+    using Windows.Storage;
     using Windows.UI.Xaml.Controls;
 
     /// <summary>
@@ -40,11 +41,11 @@
         private Windows.Media.MediaProperties.MediaEncodingProfile profile;
         private bool isListening;
 
-        public WebCamera(IScheduler takePhotoScheduler) : this(takePhotoScheduler, null)
+        public WebCamera(IScheduler userInterface) : this(userInterface, null)
         {
         }
 
-        public WebCamera(IScheduler takePhotoScheduler, CaptureElement preview) : base(takePhotoScheduler)
+        public WebCamera(IScheduler userInterface, CaptureElement preview) : base(userInterface)
         {
             this.previewElement = preview;
             this.Interpretations.Add(TakePhoto, this.TakePhotoAsync);
@@ -56,6 +57,11 @@
             {
                 return this.mediaCapture;
             }
+        }
+
+        public bool UseAudioOnly
+        {
+            get; set;
         }
 
         public object PreviewElement
@@ -91,9 +97,9 @@
             }
         }
 
-        protected override IObservable<Unit> InitializeAsync()
+        protected override IObservable<Intent> InitializeAsync()
         {
-            return Observable.FromAsync(this.EnumerateCamerasAsync);
+            return Observable.FromAsync(this.InitializeVideoAsync);
         }
 
         private int ConvertVideoRotationToMFRotation(VideoRotation rotation)
@@ -132,7 +138,18 @@
             transcoder.AddVideoEffect(Windows.Media.VideoEffects.VideoStabilization);
         }
 
-        private async Task EnumerateCamerasAsync()
+        private async Task<Intent> InitializeAudioOnlyAsync()
+        {
+            this.mediaCapture = new MediaCapture();
+            var settings = new Windows.Media.Capture.MediaCaptureInitializationSettings();
+            settings.StreamingCaptureMode = Windows.Media.Capture.StreamingCaptureMode.Audio;
+            settings.MediaCategory = Windows.Media.Capture.MediaCategory.Other;
+            settings.AudioProcessing = Windows.Media.AudioProcessing.Default;
+            await mediaCapture.InitializeAsync(settings);
+            return this.Ready();
+        }
+
+        private async Task<Intent> InitializeVideoAsync()
         {
             isListening = false;
 
@@ -140,8 +157,7 @@
             bool permissionGained = await AudioCapturePermissions.RequestMicrophoneCapture();
             if (!permissionGained)
             {
-                this.Send(new Intent("Error") { { "Message", "Requesting Microphone Capture Fails; Make sure Microphone is plugged in" } });
-                return;
+                return new Intent("Error") { { "Message", "I could not connect to the Microphone, can you make sure my Microphone is plugged in?" } };
             }
 
             var devices = await Windows.Devices.Enumeration.DeviceInformation.FindAllAsync(Windows.Devices.Enumeration.DeviceClass.VideoCapture);
@@ -154,12 +170,14 @@
                     deviceList.Add(devices[i]);
                 }
 
-                var captureSettings = this.InitCaptureSettings();
+                var captureSettings = this.InitVideoCaptureSettings();
                 await this.InitMediaCaptureAsync(captureSettings);
             }
+
+            return this.Ready();
         }
 
-        private MediaCaptureInitializationSettings InitCaptureSettings()
+        private MediaCaptureInitializationSettings InitVideoCaptureSettings()
         {
             // Set the Capture Setting
             var captureInitSettings = new Windows.Media.Capture.MediaCaptureInitializationSettings();
@@ -211,16 +229,26 @@
 
         private async Task<Intent> TakePhotoAsync()
         {
-            var sequenceCapture = await this.mediaCapture.PrepareLowLagPhotoSequenceCaptureAsync(ImageEncodingProperties.CreateJpeg());
-            var captures = Observable.FromEventPattern<Windows.Foundation.TypedEventHandler<LowLagPhotoSequenceCapture, PhotoCapturedEventArgs>, PhotoCapturedEventArgs>(
-                handler => sequenceCapture.PhotoCaptured += handler,
-                handler => sequenceCapture.PhotoCaptured -= handler);
+            var fileName = "Fatty-" + DateTime.Today.ToString("yyyy-MM-dd");
+            var photoFile = await KnownFolders.CameraRoll.CreateFileAsync(fileName, CreationCollisionOption.GenerateUniqueName);
+            ImageEncodingProperties imageProperties = ImageEncodingProperties.CreateJpeg();
+            await mediaCapture.CapturePhotoToStorageFileAsync(imageProperties, photoFile);
+            return new Intent(PhotoTaken)
+            {
+                { "FileName", photoFile.Name },
+                { "Path", photoFile.Path }
+            };
 
-            await sequenceCapture.StartAsync();
-            var intent = await captures.Take(1).Select(c => new Intent(PhotoTaken) { { "Time", c.EventArgs.CaptureTimeOffset.ToString() } });
-            await sequenceCapture.StopAsync();
-            await sequenceCapture.FinishAsync();
-            return intent;
+            ////var sequenceCapture = await this.mediaCapture.PrepareLowLagPhotoSequenceCaptureAsync(ImageEncodingProperties.CreateJpeg());
+            ////var captures = Observable.FromEventPattern<Windows.Foundation.TypedEventHandler<LowLagPhotoSequenceCapture, PhotoCapturedEventArgs>, PhotoCapturedEventArgs>(
+            ////    handler => sequenceCapture.PhotoCaptured += handler,
+            ////    handler => sequenceCapture.PhotoCaptured -= handler);
+
+            ////await sequenceCapture.StartAsync();
+            ////var intent = await captures.Take(1).Select(c => new Intent(PhotoTaken) { { "Time", c.EventArgs.CaptureTimeOffset.ToString() } });
+            ////await sequenceCapture.StopAsync();
+            ////await sequenceCapture.FinishAsync();
+            ////return intent;
         }
     }
 }
