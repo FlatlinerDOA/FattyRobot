@@ -49,6 +49,8 @@ namespace Fatty.Brain.Cognition
             this.Interpretations.Add("Error", error => Observable.Return(new Intent("ApologizeFor", error)));
             this.Interpretations.Add("ApologizeFor", _ => this.Say(this.apologies.Next(), _.Values.First()));
             this.Interpretations.Add("Hello", _ => this.Say(this.greetings.Next()));
+            this.Interpretations.Add("Heard", heard => this.Say("Did you just say {0}?", heard["Text"]));
+
         }
 
         protected override IObservable<Intent> InitializeAsync()

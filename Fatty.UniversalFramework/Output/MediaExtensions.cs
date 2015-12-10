@@ -17,8 +17,7 @@ namespace Fatty.UniversalFramework.Output
         {
             var t = Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(
                 handler => source.MediaEnded += handler,
-                handler => source.MediaEnded -= handler).Select(_ => new Unit())
-                .Take(1);
+                handler => source.MediaEnded -= handler).Select(_ => new Unit());
             return t;
         }
 

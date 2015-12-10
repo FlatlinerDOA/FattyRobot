@@ -73,7 +73,7 @@ namespace Fatty.UniversalFramework.Output
             return Observable.Defer(() =>
             {
                 this.InitializeSynthesizer();
-                return Observable.Return(this.Ready()).Concat(this.media.MediaEnds().SubscribeOn(this.dispatcher).ObserveOn(this.dispatcher).Select(_ => new Intent("DoneSaying")));
+                return Observable.Return(this.Ready()).Merge(this.media.MediaEnds().SubscribeOn(this.ObserveOn).ObserveOn(this.ObserveOn).Select(_ => new Intent("DoneSaying")));
             });
         }
 

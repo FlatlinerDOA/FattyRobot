@@ -146,6 +146,12 @@
             if (args.Status == SpeechRecognitionResultStatus.TimeoutExceeded)
             {
                 this.Send(new Intent("Listen"));
+                return;
+            }
+
+            if (args.Status == SpeechRecognitionResultStatus.Success)
+            {
+                return;
             }
 
             this.Send(new Intent("Ignored") { { "Status", args.Status.ToString() } });
