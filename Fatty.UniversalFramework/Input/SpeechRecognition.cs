@@ -138,7 +138,7 @@
 
         private void ResultGenerated(SpeechContinuousRecognitionResultGeneratedEventArgs args)
         {            
-            this.Send(new Intent("Heard", args.Result.RawConfidence, 1) { { "Text", args.Result.Text } });
+            this.Send(new Intent("Heard", args.Result.RawConfidence, 2) { { "Text", args.Result.Text } });
         }
 
         private async void Completed(SpeechContinuousRecognitionCompletedEventArgs args)
@@ -151,6 +151,7 @@
 
             if (args.Status == SpeechRecognitionResultStatus.Success)
             {
+                ////this.Send(new Intent("Listen"));
                 return;
             }
 
