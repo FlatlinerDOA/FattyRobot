@@ -31,3 +31,7 @@ This tells the SpeechSynthesis module to read the text "Hello my name is Fatty" 
 
 
 Some modules are only applicable in certain contexts, for example the TextInput module is only relevant when there is a user interface. The MotorControl module is only relevant when on a Raspberry PI with it's GPIO port available.
+
+
+## How to build your own Robot
+While having a physical robot for running this AI is completely optional, it is really cool to have an autonomous robot running around your house. The robot you see above is a variation on the basic [Robot Kit on hackster.io|https://www.hackster.io/windowsiot/robot-kit-6dd474]
