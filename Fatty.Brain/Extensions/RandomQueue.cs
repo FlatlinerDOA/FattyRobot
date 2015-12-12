@@ -65,5 +65,10 @@
         {
             throw new NotImplementedException();
         }
+
+        public T Find(Func<T, bool> predicate)
+        {
+            return this.source.FirstOrDefault(predicate);
+        }
     }
 }

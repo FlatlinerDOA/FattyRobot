@@ -137,7 +137,12 @@
         }
 
         private void ResultGenerated(SpeechContinuousRecognitionResultGeneratedEventArgs args)
-        {            
+        {
+            if (string.IsNullOrWhiteSpace(args.Result.Text) || args.Result.RawConfidence < 0.1)
+            {
+                return;
+            }
+
             this.Send(new Intent("Heard", args.Result.RawConfidence, 2) { { "Text", args.Result.Text } });
         }
 

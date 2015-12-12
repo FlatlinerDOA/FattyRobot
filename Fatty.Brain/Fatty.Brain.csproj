@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Cognition\Educational.cs" />
     <Compile Include="Cognition\Manners.cs" />
+    <Compile Include="Cognition\Navigation.cs" />
     <Compile Include="Extensions\RandomExtensions.cs" />
     <Compile Include="Extensions\RandomQueue.cs" />
     <Compile Include="Extensions\RandomQueueEnumerator.cs" />

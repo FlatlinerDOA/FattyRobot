@@ -44,7 +44,7 @@
         {
             "Yesterday all my troubles seemed so far away, now I know that they are here to stay, oh I believe in yesterday.",
             "ooh eee ooh ahh ahh ting tang walla walla bing bang, ooh eee ooh ahh ahh ting tang walla walla bang bang.", // I told the witch doctor I was in love with you, I told the witch doctor I was in love with you, and the witch doctor and he told me what to do. He told me ooh eee ooh ahh ahh ting tang walla walla bing bang, ooh eee ooh ahh ahh ting tang walla walla bang bang.",
-            "ooh it's too real, chromed out mirrors I don't need a windshield, banana seat a canopy on two wheels, 800 cash that's a hell of deal, I'm heading Downtown. Cruisin' through the alley.",
+            "ooh it's too real, chromed out mirrors I don't need a windshield, banana seat a canopy on two wheels, 800 cash that's a hell of a deal, I'm heading Downtown, cruisin' through the alley.",
             "say you'll remember me, standing in a nice dress, staring at the sunset bayib", // He said let's get out of this town, away from the city, away from the crowd. I thought heaven can't help me now, nothing lasts forever, but this getting good now. He's so tall and handsome as hell, he's so bad but he does it so well, and when we've had our very last kiss, my one request ee-is,  
             "You used to call me on your cell phone, late night when you need my love. I know when that hotline bling, it can only mean one thing",
             "Watch me whip, watch me nay nay. Watch me whip, whip, watch me nay nay",
@@ -61,10 +61,42 @@
 
         public Playful() : base(Scheduler.Default)
         {
-            this.Interpretations.Add("Sing", _ => this.Say(this.songs.Next()));
-            this.Interpretations.Add("Joke", _ => this.Say(this.jokes.Next()));
+            this.Interpretations.Add("Sing", this.Sing);
+            this.Interpretations.Add("Joke", this.Joke);
             this.Interpretations.Add("ComeBack", _ => this.Say(this.comebacks.Next()));
-            this.Interpretations.Add("Impression", _ => this.Say(this.impressions.Next()));
+            this.Interpretations.Add("Impression", this.Impression);
         }
+
+        private IObservable<Intent> Impression(Intent intent)
+        {
+            return this.RandomOrSpecific(intent, this.impressions, "Impression");
+        }
+
+        private IObservable<Intent> Sing(Intent intent)
+        {
+            return this.RandomOrSpecific(intent, this.songs, "Song");
+        }
+
+        private IObservable<Intent> Joke(Intent intent)
+        {
+            return this.RandomOrSpecific(intent, this.jokes, "JokeTopic");
+        }
+
+        private IObservable<Intent> RandomOrSpecific(Intent intent, RandomQueue<string> list, string key)
+        {
+            if (intent.ContainsKey(key))
+            {
+                var specificItem = this.jokes.Find(j => j.IndexOf(intent[key], StringComparison.OrdinalIgnoreCase) != -1);
+                if (specificItem != null)
+                {
+                    return this.Say(specificItem);
+                }
+
+                return this.Say("Sorry I don't know that one, but " + list.Next());
+            }
+
+            return this.Say(list.Next());
+        }
+
     }
 }

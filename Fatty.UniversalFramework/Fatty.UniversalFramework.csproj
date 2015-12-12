@@ -107,6 +107,10 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Input\LanguageUnderstanding.cs" />
+    <Compile Include="Input\LuisEntity.cs" />
+    <Compile Include="Input\LuisIntent.cs" />
+    <Compile Include="Input\LuisQuery.cs" />
     <Compile Include="Input\SpeechRecognition.cs" />
     <Compile Include="Input\WebCamera.cs" />
     <Compile Include="Output\AudioCapturePermissions.cs" />

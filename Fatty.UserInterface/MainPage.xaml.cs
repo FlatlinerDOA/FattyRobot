@@ -62,7 +62,8 @@ namespace Fatty.UserInterface
                 new Educational(),
                 new Playful(),
                 //   new WebCamera(normalScheduler, this.capturePreview),
-                new SpeechRecognition(normalScheduler)
+                new SpeechRecognition(normalScheduler),
+                new LanguageUnderstanding()
             };
 
             this.subscription = this.brain.Start(

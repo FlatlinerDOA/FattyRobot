@@ -43,14 +43,16 @@ namespace Fatty.Brain.Cognition
 
         public Manners()
         {
-            this.Interpretations.Add("No", _ => Observable.Return(new Intent("ApologizeFor", _)));
+            this.Interpretations.Add("Apologise", _ => Observable.Return(new Intent("Apologize", _)));
+            this.Interpretations.Add("Sorry", _ => Observable.Return(new Intent("Apologize", _)));
+            this.Interpretations.Add("Yes", _ => this.Say("Very good"));
+            this.Interpretations.Add("No", _ => Observable.Return(new Intent("Apologize", _)));
             this.Interpretations.Add("AskFor", _ => this.Say(this.askFor.Next(), _.Values.First()));
             this.Interpretations.Add("Thanks", _ => this.Say(this.thanks.Next()));
-            this.Interpretations.Add("Error", error => Observable.Return(new Intent("ApologizeFor", error)));
-            this.Interpretations.Add("ApologizeFor", _ => this.Say(this.apologies.Next(), _.Values.First()));
+            this.Interpretations.Add("Error", error => Observable.Return(new Intent("Apologize", error)));
+            this.Interpretations.Add("Apologize", _ => this.Say(this.apologies.Next(), _.Values.First()));
             this.Interpretations.Add("Hello", _ => this.Say(this.greetings.Next()));
-            this.Interpretations.Add("Heard", heard => this.Say("Did you just say {0}?", heard["Text"]));
-
+            ////this.Interpretations.Add("Heard", heard => Observable.Return(new Intent(heard["Text"].SubstringToFirst(" ")) { { "Text", heard["Text"].SubstringFromFirst(" ") } }));
         }
 
         protected override IObservable<Intent> InitializeAsync()
