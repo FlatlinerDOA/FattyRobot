@@ -34,4 +34,4 @@ Some modules are only applicable in certain contexts, for example the TextInput 
 
 
 ## How to build your own Robot
-While having a physical robot for running this AI is completely optional, it is really cool to have an autonomous robot running around your house. The robot you see above is a variation on the basic [Robot Kit on hackster.io|https://www.hackster.io/windowsiot/robot-kit-6dd474]
+While having a physical robot for running this AI is completely optional, it is really cool to have an autonomous robot running around your house. The robot you see above is a variation on the basic Robot Kit on hackster.io - https://www.hackster.io/windowsiot/robot-kit-6dd474
