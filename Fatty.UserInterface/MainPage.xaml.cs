@@ -64,7 +64,8 @@ namespace Fatty.UserInterface
                 //   new WebCamera(normalScheduler, this.capturePreview),
                 new SpeechRecognition(normalScheduler),
                 new LanguageUnderstanding(),
-                new NetworkControl(null),
+                new SpeechSynthesis(this.Dispatcher, this.media),
+                //new NetworkControl(null),
 #else
 #if ARM
                 new SpeechSynthesis(this.Dispatcher, this.media),
