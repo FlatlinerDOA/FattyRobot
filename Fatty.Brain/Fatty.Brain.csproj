@@ -59,7 +59,6 @@
     <Compile Include="Cognition\Playful.cs" />
     <Compile Include="Input\FacialRecognition.cs" />
     <Compile Include="Extensions\ModuleExtensions.cs" />
-    <Compile Include="Output\MotorControl.cs" />
     <Compile Include="Output\RemoteTelemetry.cs" />
     <Compile Include="Output\SpeechSynthesisExtensions.cs" />
     <Compile Include="Intent.cs" />

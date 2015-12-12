@@ -61,6 +61,10 @@ namespace Fatty.UserInterface
             this.userInterface.Schedule(() =>
             {
                 this.logs.Insert(0, value);
+                if (this.logs.Count > 100)
+                {
+                    this.logs.RemoveAt(this.logs.Count - 1);
+                }
             });
 
             base.OnNext(value);

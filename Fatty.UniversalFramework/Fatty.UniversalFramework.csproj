@@ -115,6 +115,7 @@
     <Compile Include="Input\WebCamera.cs" />
     <Compile Include="Output\AudioCapturePermissions.cs" />
     <Compile Include="Output\MediaExtensions.cs" />
+    <Compile Include="Output\MotorControl.cs" />
     <Compile Include="Output\SpeechSynthesis.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Fatty.UniversalFramework.rd.xml" />
@@ -124,6 +125,11 @@
       <Project>{383e2f44-4115-47ec-af0d-b552261b60b3}</Project>
       <Name>Fatty.Brain</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="WindowsIoT, Version=10.0.10586.0">
+      <Name>Windows IoT Extensions for the UWP</Name>
+    </SDKReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

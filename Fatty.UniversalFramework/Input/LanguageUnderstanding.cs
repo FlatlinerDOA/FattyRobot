@@ -36,7 +36,7 @@ namespace Fatty.UniversalFramework.Input
                     var intent = query.Intents.FirstOrDefault();
                     if (intent != null)
                     {
-                        if (intent.Intent == "None")
+                        if (intent.Intent == "None" || intent.Score < 0.1)
                         {
                             return null;
                         }

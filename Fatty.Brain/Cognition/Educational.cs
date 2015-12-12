@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Fatty.Brain.Extensions;
@@ -22,12 +23,18 @@ namespace Fatty.Brain.Cognition
 
         public Educational()
         {
-            this.Interpretations.Add("Spell", _ => this.Spell(_.Values.First()));
+            this.Interpretations.Add("Spell", this.Spell);
             this.Interpretations.Add("Explain", _ => this.Say(this.explanations.Next()));
         }
 
-        private IObservable<Intent> Spell(string text)
+        private IObservable<Intent> Spell(Intent intent)
         {
+            var text = intent.Values.FirstOrDefault();
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return Observable.Return<Intent>(null);
+            }
+
             var sb = new StringBuilder();
             for (int i = 0; i < text.Length; i++)
             {

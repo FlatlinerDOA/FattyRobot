@@ -52,7 +52,20 @@ namespace Fatty.Brain.Cognition
             this.Interpretations.Add("Error", error => Observable.Return(new Intent("Apologize", error)));
             this.Interpretations.Add("Apologize", _ => this.Say(this.apologies.Next(), _.Values.First()));
             this.Interpretations.Add("Hello", _ => this.Say(this.greetings.Next()));
+            this.Interpretations.Add("Heard", this.SimpleResponses);
+
             ////this.Interpretations.Add("Heard", heard => Observable.Return(new Intent(heard["Text"].SubstringToFirst(" ")) { { "Text", heard["Text"].SubstringFromFirst(" ") } }));
+        }
+
+        private IObservable<Intent> SimpleResponses(Intent heard)
+        {
+            var firstWord = heard["Text"].SubstringToFirst(" ");
+            if (string.Equals(firstWord, "say") || string.Equals(firstWord, "spell"))
+            {
+                return Observable.Return(new Intent(firstWord) { { "Text", heard["Text"].SubstringFromFirst(" ") } });
+            }
+
+            return Observable.Return<Intent>(null);
         }
 
         protected override IObservable<Intent> InitializeAsync()
