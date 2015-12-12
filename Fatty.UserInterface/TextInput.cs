@@ -24,7 +24,12 @@ namespace Fatty.UserInterface
 
             return changes.SubscribeOnDispatcher().Select(t =>
             {
-                var result = this.Parse(this.textBox.Text);
+                if (string.IsNullOrWhiteSpace(this.textBox.Text) || !this.textBox.Text.Contains("\n"))
+                {
+                    return null;
+                }
+
+                var result = Intent.Parse(this.textBox.Text);
                 if (result != null)
                 {
                     this.textBox.Text = string.Empty;
@@ -32,30 +37,6 @@ namespace Fatty.UserInterface
 
                 return result;
             }).Subscribe(observer);
-        }
-
-        private Intent Parse(string text)
-        {
-            if (string.IsNullOrWhiteSpace(text) || !text.Contains("\n"))
-            {
-                // No intent yet
-                return null;
-            }
-
-            text = text.Trim('\r', '\n');
-            var intent = new Intent(text.SubstringToFirst(" "));
-            var args = text.SubstringFromFirst(" ").Split(';');
-            if (args.Length > 0)
-            {
-                for (int i = 0; i < args.Length; i++)
-                {
-                    var key = args[i].SubstringToFirst("=");
-                    var value = args[i].SubstringFromFirst("=");
-                    intent[key] = value;
-                }
-            }
-
-            return intent;
         }
     }
 }

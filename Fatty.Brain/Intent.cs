@@ -4,6 +4,7 @@
     using System.Collections;
     using System.Collections.Generic;
     using System.Text;
+    using Extensions;
     public sealed class Intent : IDictionary<string, string>
     {
         private readonly Dictionary<string, string> args;
@@ -24,6 +25,33 @@
             this.Priority = 2;
             this.Probability = 1d;
             this.Weight = 0.5d;
+        }
+
+        public static Intent Parse(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                // No intent yet
+                return null;
+            }
+
+            text = text.TrimEnd('\r', '\n', ';', '~');
+            var intent = new Intent(text.SubstringToFirst(" "));
+            if (text.IndexOf(' ') != -1)
+            {
+                var args = text.SubstringFromFirst(" ").Split(';');
+                if (args.Length > 0)
+                {
+                    for (int i = 0; i < args.Length; i++)
+                    {
+                        var key = args[i].SubstringToFirst("=");
+                        var value = args[i].SubstringFromFirst("=");
+                        intent[key] = value;
+                    }
+                }
+            }
+
+            return intent;
         }
 
         public Intent(string name, double probability, int priority)
@@ -186,12 +214,10 @@
                 return sb.ToString();
             }
 
-            sb.AppendLine();
-
+            sb.Append(" ");
             foreach (var kv in this)
             {
-                sb.Append(" ").Append(kv.Key).Append("=").Append(kv.Value);
-                sb.AppendLine();
+                sb.Append(kv.Key).Append("=").Append(kv.Value).Append(";");
             }
 
             return sb.ToString();

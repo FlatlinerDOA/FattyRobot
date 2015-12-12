@@ -111,9 +111,12 @@
     <Compile Include="Input\LuisEntity.cs" />
     <Compile Include="Input\LuisIntent.cs" />
     <Compile Include="Input\LuisQuery.cs" />
+    <Compile Include="Input\NetworkControl.cs" />
     <Compile Include="Input\SpeechRecognition.cs" />
     <Compile Include="Input\WebCamera.cs" />
     <Compile Include="Output\AudioCapturePermissions.cs" />
+    <Compile Include="Output\CtrlCmds.cs" />
+    <Compile Include="Output\CtrlSpeeds.cs" />
     <Compile Include="Output\MediaExtensions.cs" />
     <Compile Include="Output\MotorControl.cs" />
     <Compile Include="Output\SpeechSynthesis.cs" />

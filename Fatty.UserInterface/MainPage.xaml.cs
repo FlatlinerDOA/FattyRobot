@@ -57,13 +57,20 @@ namespace Fatty.UserInterface
             {
                 new TextInput(this.control),
                 new UserInterfaceTelemetry(this.Logs, lowScheduler),
-                new SpeechSynthesis(this.Dispatcher, this.media),
+#if X64
                 new Manners(),
                 new Educational(),
                 new Playful(),
                 //   new WebCamera(normalScheduler, this.capturePreview),
                 new SpeechRecognition(normalScheduler),
-                new LanguageUnderstanding()
+                new LanguageUnderstanding(),
+                new NetworkControl(null),
+#else
+#if ARM
+                new SpeechSynthesis(this.Dispatcher, this.media),
+                new NetworkControl("10.0.1.30"),
+#endif
+#endif
             };
 
             this.subscription = this.brain.Start(
