@@ -1,4 +1,5 @@
-# Fatty the Robot
+# Fatty the Robot AI
+<img src="docs\fatty.jpg">
 Fatty is a robot with an AI brain including speech synth and recognition, natural language understanding, computer vision and servo motor control. 
 Fatty runs on a Windows 10 Desktop, or Raspberry PI 2 with Windows IoT. He was built with the aim at getting Kids involved in building robots at home that can do amazing things.
 
@@ -17,6 +18,7 @@ The brain has modules that can send and or receive special messages called Inten
 And intent has a Name, Probability, Priority and a striing dictionary of key/value pairs for meta data about the Intent.
 Intents do not need to be registered in any central location and any module can handle and interpret any intent.
 Intents can be easily converted to and from a string for sending over the wire or writing / reading from log files etc.
+Intents are routed to each module currently via a broadcast pub sub, the plan is in future to use a Neural network to prioritise and schedule routing. This will be an area of continued research and development.
 
 Example:
 Say Text=Hello my name is Fatty
